@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const WelcomePage = () => {
   return (
     <div className="container mx-auto text-center p-4 min-h-screen flex flex-col justify-center lg:px-20">
@@ -10,9 +12,12 @@ const WelcomePage = () => {
         and more to learn and grow.
       </p>
       <div className="flex justify-center gap-4">
-        <button className="bg-secondary-green hover:bg-secondary-teal text-white font-bold py-2 px-8 rounded transition duration-300">
-          Log In
-        </button>
+        <Link to="/login">
+          <button className="bg-secondary-green hover:bg-secondary-teal text-white font-bold py-2 px-8 rounded transition duration-300">
+            Log In
+          </button>
+        </Link>
+
         <button className="bg-secondary-orange hover:bg-accent-yellow text-white font-bold py-2 px-8 rounded transition duration-300">
           Register
         </button>
