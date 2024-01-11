@@ -18,9 +18,11 @@ const WelcomePage = () => {
           </button>
         </Link>
 
-        <button className="bg-secondary-orange hover:bg-accent-yellow text-white font-bold py-2 px-8 rounded transition duration-300">
-          Register
-        </button>
+        <Link to="./register">
+          <button className="bg-secondary-orange hover:bg-accent-yellow text-white font-bold py-2 px-8 rounded transition duration-300">
+            Register
+          </button>
+        </Link>
       </div>
     </div>
   );
