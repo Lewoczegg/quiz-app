@@ -1,7 +1,10 @@
 package lewocz.backend.controller;
 
 import jakarta.validation.Valid;
+import lewocz.backend.dto.LoginRequest;
+import lewocz.backend.dto.LoginResponse;
 import lewocz.backend.dto.SignUpRequest;
+import lewocz.backend.helper.JwtHelper;
 import lewocz.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,5 +21,11 @@ public class AuthController {
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequest signUpRequest) throws Exception {
         userService.signUp(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        String token = JwtHelper.generateToken(request.getEmail());
+        return ResponseEntity.ok(new LoginResponse(request.getEmail(), token));
     }
 }
