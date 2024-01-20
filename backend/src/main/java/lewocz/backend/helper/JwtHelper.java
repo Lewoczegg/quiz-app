@@ -17,7 +17,7 @@ import java.util.Date;
 public class JwtHelper {
 
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final int MINUTES = 60;
+    private static final int MINUTES = 180;
 
     public static String generateToken(String email) {
         var now = Instant.now();
