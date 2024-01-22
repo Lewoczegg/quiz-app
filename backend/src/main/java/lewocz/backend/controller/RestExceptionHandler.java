@@ -1,5 +1,6 @@
 package lewocz.backend.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lewocz.backend.dto.ApiErrorResponse;
 import lewocz.backend.exception.DuplicateException;
 import lewocz.backend.exception.NotFoundException;
@@ -50,6 +51,11 @@ public class RestExceptionHandler {
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity<ApiErrorResponse> handleInternalAuthenticationServiceException(InternalAuthenticationServiceException e) {
         return ResponseEntity.status(UNAUTHORIZED).body(new ApiErrorResponse(UNAUTHORIZED.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity.status(NOT_FOUND).body(new ApiErrorResponse(NOT_FOUND.value(), e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
