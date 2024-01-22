@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,6 +23,10 @@ public class Question {
     private Topic topic;
 
     @NotBlank(message = "Question text cannot be blank")
+    @Column(unique = true)
     @Lob
     private String text;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Answer> answers;
 }
