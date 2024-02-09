@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { useForm } from "react-hook-form";
-import { signIn } from "../services/authService";
 import axios from "axios";
+import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { signIn } from "../services/authService";
 
 type Inputs = {
   email: string;
@@ -15,7 +15,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [cookie, setCookie] = useCookies();
-  const navigae = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -38,7 +38,7 @@ const LoginPage = () => {
         setCookie("jwt", response.data.token, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
-        navigae("/dashboard");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
