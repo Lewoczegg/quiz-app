@@ -20,4 +20,6 @@ public class Topic {
     @NotBlank(message = "Topic name cannot be blank")
     @Column(nullable = false, unique = true)
     private String name;
+
+    private String imageUrl;
 }
