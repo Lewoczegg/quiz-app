@@ -8,3 +8,12 @@ export const getTopics = async (token: string) => {
     method: "GET",
   });
 };
+
+export const getQuiz = async (token: string, topicName: string) => {
+  return await apiRequest({
+    url: `/quiz/${topicName}`,
+    token: token,
+    data: {},
+    method: "GET",
+  });
+};

@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import { useCookies } from "react-cookie";
 import { isTokenExpired } from "./utils";
 import DashboardPage from "./pages/DashboardPage";
+import QuizPage from "./pages/QuizPage";
 
 function ProtectedRoute() {
   const [cookies] = useCookies(["jwt"]);
@@ -27,6 +28,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/quiz" element={<QuizPage />} />
         </Route>
       </Routes>
     </div>

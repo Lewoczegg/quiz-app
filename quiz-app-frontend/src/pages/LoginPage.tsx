@@ -35,7 +35,11 @@ const LoginPage = () => {
       });
 
       if (response?.status === 200) {
+        console.log(response);
         setCookie("jwt", response.data.token, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        });
+        setCookie("user", response.data.username, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
         navigate("/dashboard");
