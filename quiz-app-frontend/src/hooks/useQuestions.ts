@@ -17,7 +17,7 @@ interface Answer {
 
 const useQuestions = () => {
   const { quiz } = useQuizStore();
-  const [topics, setTopics] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [cookies] = useCookies(["jwt"]);
   const token = cookies.jwt;
 
@@ -25,7 +25,7 @@ const useQuestions = () => {
     const fetchTopics = async () => {
       try {
         const response = await getQuiz(token, quiz.topicName);
-        setTopics(response.data);
+        setQuestions(response.data);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
@@ -34,7 +34,7 @@ const useQuestions = () => {
     fetchTopics();
   }, [token]);
 
-  return topics;
+  return questions;
 };
 
 export default useQuestions;

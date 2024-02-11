@@ -3,9 +3,14 @@ import Footer from "../components/Footer";
 import useQuestions from "../hooks/useQuestions";
 import { useState } from "react";
 import QuizQuestion from "../components/QuizQuestion";
+import useQuizStore from "../store/quizStore";
 
 const QuizPage = () => {
   const questions = useQuestions();
+  const {
+    quiz: { selectedAnswers },
+    setSelectedAnswer,
+  } = useQuizStore();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
@@ -37,6 +42,17 @@ const QuizPage = () => {
                     <input
                       type="radio"
                       name="answer"
+                      checked={
+                        selectedAnswers.get(
+                          questions[currentQuestionIndex].id
+                        ) === answer.id
+                      }
+                      onChange={() =>
+                        setSelectedAnswer(
+                          questions[currentQuestionIndex].id,
+                          answer.id
+                        )
+                      }
                       className="mr-2 appearance-none w-4 h-4 border border-primary-blue rounded-full checked:bg-primary-blue checked:border-transparent focus:outline-none shrink-0"
                     />
                     <span className="text-lg">{answer.text}</span>
