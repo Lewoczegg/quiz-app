@@ -9,6 +9,7 @@ interface QuizStore {
   quiz: Quiz;
   setQuizTopic: (topic: string) => void;
   setSelectedAnswer: (questionId: string, answerId: string) => void;
+  setQuizRestarted: () => void;
 }
 
 const useQuizStore = create<QuizStore>((set) => ({
@@ -23,6 +24,8 @@ const useQuizStore = create<QuizStore>((set) => ({
       state.quiz.selectedAnswers.set(questionId, answerId);
       return { quiz: { ...state.quiz } };
     }),
+  setQuizRestarted: () =>
+    set((state) => ({ quiz: { ...state.quiz, selectedAnswers: new Map() } })),
 }));
 
 export default useQuizStore;
