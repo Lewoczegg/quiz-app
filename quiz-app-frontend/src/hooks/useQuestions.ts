@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { getQuiz } from "../services/quizService";
+import { useQuery } from "react-query";
 import useQuizStore from "../store/quizStore";
+import { axiosInstance } from "../services/api-client";
 
 interface Question {
   id: string;
@@ -17,24 +17,22 @@ interface Answer {
 
 const useQuestions = () => {
   const { quiz } = useQuizStore();
-  const [questions, setQuestions] = useState<Question[]>([]);
   const [cookies] = useCookies(["jwt"]);
   const token = cookies.jwt;
 
-  useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const response = await getQuiz(token, quiz.topicName);
-        setQuestions(response.data);
-      } catch (error) {
-        console.error("Error fetching questions:", error);
-      }
-    };
+  const getQuiz = (): Promise<Question[]> =>
+    axiosInstance
+      .get(`/quiz/${quiz.topicName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data);
 
-    fetchTopics();
-  }, [token]);
-
-  return questions;
+  return useQuery({
+    queryKey: "questions",
+    queryFn: getQuiz,
+  });
 };
 
 export default useQuestions;

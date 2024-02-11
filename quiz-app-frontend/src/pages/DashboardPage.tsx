@@ -5,7 +5,7 @@ import useTopics from "../hooks/useTopics";
 import { useCookies } from "react-cookie";
 
 const DashboardPage = () => {
-  const topics = useTopics();
+  const { data: topics } = useTopics();
   const [cookie] = useCookies();
 
   return (
@@ -18,7 +18,7 @@ const DashboardPage = () => {
           Quiz Categories
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {topics.map((topic) => (
+          {topics?.map((topic) => (
             <TopicCard key={topic.id} topic={topic} />
           ))}
         </div>

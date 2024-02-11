@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { getTopics } from "../services/quizService";
 import { useCookies } from "react-cookie";
+import { useQuery } from "react-query";
+import { axiosInstance } from "../services/api-client";
 
 export interface Topic {
   id: string;
@@ -9,24 +9,22 @@ export interface Topic {
 }
 
 const useTopics = () => {
-  const [topics, setTopics] = useState<Topic[]>([]);
   const [cookies] = useCookies(["jwt"]);
   const token = cookies.jwt;
 
-  useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const response = await getTopics(token);
-        setTopics(response.data);
-      } catch (error) {
-        console.error("Error fetching topics:", error);
-      }
-    };
+  const getTopics = (): Promise<Topic[]> =>
+    axiosInstance
+      .get("/topic/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data);
 
-    fetchTopics();
-  }, [token]);
-
-  return topics;
+  return useQuery({
+    queryKey: "topics",
+    queryFn: getTopics,
+  });
 };
 
 export default useTopics;
