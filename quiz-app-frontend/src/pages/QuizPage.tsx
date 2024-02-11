@@ -4,6 +4,7 @@ import useQuestions from "../hooks/useQuestions";
 import { useState } from "react";
 import QuizQuestion from "../components/QuizQuestion";
 import useQuizStore from "../store/quizStore";
+import QuizOption from "../components/QuizOption";
 
 const QuizPage = () => {
   const questions = useQuestions();
@@ -26,6 +27,10 @@ const QuizPage = () => {
     }
   };
 
+  const handleSubmitQuiz = () => {
+    console.log("Quiz submitted:", selectedAnswers);
+  };
+
   return (
     <div className="min-h-screen bg-neutral-lightgray flex flex-col">
       <TopBar />
@@ -37,48 +42,53 @@ const QuizPage = () => {
             </h2>
             <ul>
               {questions[currentQuestionIndex].answers.map((answer) => (
-                <li key={answer.id} className="mb-4">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="answer"
-                      checked={
-                        selectedAnswers.get(
-                          questions[currentQuestionIndex].id
-                        ) === answer.id
-                      }
-                      onChange={() =>
-                        setSelectedAnswer(
-                          questions[currentQuestionIndex].id,
-                          answer.id
-                        )
-                      }
-                      className="mr-2 appearance-none w-4 h-4 border border-primary-blue rounded-full checked:bg-primary-blue checked:border-transparent focus:outline-none shrink-0"
-                    />
-                    <span className="text-lg">{answer.text}</span>
-                  </label>
-                </li>
+                <QuizOption
+                  key={answer.id}
+                  answer={answer}
+                  isSelected={
+                    selectedAnswers.get(questions[currentQuestionIndex].id) ===
+                    answer.id
+                  }
+                  onChange={() =>
+                    setSelectedAnswer(
+                      questions[currentQuestionIndex].id,
+                      answer.id
+                    )
+                  }
+                />
               ))}
             </ul>
             <div className="flex mt-8 gap-4 justify-center">
               <button
                 onClick={handlePreviousQuestion}
-                className="bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-secondary-blue focus:outline-none"
+                className={`bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-secondary-blue focus:outline-none ${
+                  currentQuestionIndex === 0
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                disabled={currentQuestionIndex === 0}
               >
                 Previous Question
               </button>
-              <button
-                onClick={handleNextQuestion}
-                className="bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-secondary-blue focus:outline-none"
-              >
-                Next Question
-              </button>
+              {currentQuestionIndex === questions.length - 1 ? (
+                <button
+                  onClick={handleSubmitQuiz}
+                  className="bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-secondary-blue focus:outline-none"
+                >
+                  Submit
+                </button>
+              ) : (
+                <button
+                  onClick={handleNextQuestion}
+                  className="bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-secondary-blue focus:outline-none"
+                >
+                  Next Question
+                </button>
+              )}
             </div>
-          </div>
-        )}
-        {currentQuestionIndex === questions.length && (
-          <div className="mt-8 text-xl font-bold">
-            <h2>Quiz Completed!</h2>
+            <p className="mt-4 text-sm text-gray-500">
+              Question {currentQuestionIndex + 1} of {questions.length}
+            </p>
           </div>
         )}
       </div>
