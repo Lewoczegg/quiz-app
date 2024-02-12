@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useQueryClient } from "react-query";
 import Footer from "../components/Footer";
 import QuizOption from "../components/QuizOption";
 import QuizQuestion from "../components/QuizQuestion";
 import QuizResultsModal from "../components/QuizResultsModal";
+import QuizReview from "../components/QuizReview";
 import TopBar from "../components/TopBar";
 import useQuestions from "../hooks/useQuestions";
 import useQuizStore from "../store/quizStore";
-import { useQueryClient } from "react-query";
+import { calculateScore } from "../utils";
 
 const QuizPage = () => {
   const { data: questions, isLoading } = useQuestions();
@@ -21,6 +23,7 @@ const QuizPage = () => {
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [showAnswers, setShowAnswers] = useState(false);
 
   const handleNextQuestion = () => {
     setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
@@ -34,7 +37,7 @@ const QuizPage = () => {
     setShowResults(true);
   };
 
-  const playAgain = () => {
+  const handlePlayAgain = () => {
     queryClient.refetchQueries("questions").then(() => {
       setQuizRestarted();
       setCurrentQuestionIndex(0);
@@ -42,34 +45,34 @@ const QuizPage = () => {
     });
   };
 
-  const calculateScore = () => {
-    let score = 0;
-    questions?.forEach((question) => {
-      const selectedAnswer = selectedAnswers.get(question.id);
-      if (
-        selectedAnswer &&
-        question.answers.find((answer) => answer.id === selectedAnswer)
-          ?.isCorrect
-      ) {
-        score += 1;
-      }
-    });
-    if (!questions) return "0";
-
-    return ((score / questions.length) * 100).toFixed(2);
+  const handleShowAnswers = () => {
+    setShowAnswers(true);
+    setShowResults(false);
   };
 
   if (isLoading) return <div>Loading...</div>;
+
+  if (questions === undefined)
+    return <div>There was an error fetching the questions</div>;
 
   return (
     <div className="min-h-screen bg-neutral-lightgray flex flex-col">
       <TopBar />
       <div className="container mx-auto px-4 py-6 flex-1 lg:px-10 flex flex-col items-center justify-center">
         {showResults ? (
-          <QuizResultsModal score={calculateScore()} onPlayAgain={playAgain} />
+          <QuizResultsModal
+            score={calculateScore(questions, selectedAnswers)}
+            onPlayAgain={handlePlayAgain}
+            onShowCorrectAnswers={handleShowAnswers}
+          />
         ) : (
           <>
-            {questions && (
+            {showAnswers ? (
+              <QuizReview
+                questions={questions}
+                score={calculateScore(questions, selectedAnswers)}
+              />
+            ) : (
               <div className="bg-white p-8 rounded-md shadow-lg w-full lg:w-2/3">
                 <h2 className="text-2xl font-bold mb-6">
                   <QuizQuestion text={questions[currentQuestionIndex].text} />
@@ -90,6 +93,7 @@ const QuizPage = () => {
                           answer.id
                         )
                       }
+                      showCorrect={false}
                     />
                   ))}
                 </ul>

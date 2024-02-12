@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 interface Props {
   score: string;
   onPlayAgain: () => void;
+  onShowCorrectAnswers: () => void;
 }
 
-const QuizResultsModal = ({ score, onPlayAgain }: Props) => {
+const QuizResultsModal = ({
+  score,
+  onPlayAgain,
+  onShowCorrectAnswers,
+}: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -29,7 +34,7 @@ const QuizResultsModal = ({ score, onPlayAgain }: Props) => {
             Play Again
           </button>
           <button
-            onClick={() => {}}
+            onClick={() => onShowCorrectAnswers()}
             className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-md hover:bg-secondary-teal focus:outline-none"
           >
             Show Correct Answers

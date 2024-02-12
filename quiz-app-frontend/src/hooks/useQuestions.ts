@@ -3,13 +3,13 @@ import { useQuery } from "react-query";
 import useQuizStore from "../store/quizStore";
 import { axiosInstance } from "../services/api-client";
 
-interface Question {
+export interface Question {
   id: string;
   text: string;
   answers: Answer[];
 }
 
-interface Answer {
+export interface Answer {
   id: string;
   text: string;
   isCorrect: boolean;
