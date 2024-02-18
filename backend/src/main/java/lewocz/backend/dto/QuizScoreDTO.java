@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class QuizScoreDTO {
-    private UserDTO user;
-    private Topic topic;
+    private String userName;
+    private String topicName;
     private int score;
 }

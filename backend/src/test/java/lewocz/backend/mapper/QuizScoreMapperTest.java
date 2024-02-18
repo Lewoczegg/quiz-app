@@ -7,73 +7,47 @@ import lewocz.backend.model.Topic;
 import lewocz.backend.model.User;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class QuizScoreMapperTest {
 
-    private final QuizScoreMapper quizScoreMapper = Mappers.getMapper(QuizScoreMapper.class);
+    @Autowired
+    QuizScoreMapper quizScoreMapper;
 
     @Test
     void quizScoreDtoToQuizScore() {
-        UserDTO userDTO = UserDTO.builder()
-                .username("testuser")
-                .email("testuser@example.com")
-                .build();
-
-        Topic topic = Topic.builder()
-                .id(UUID.randomUUID())
-                .name("Math")
-                .imageUrl("math_image_url")
-                .build();
-
         QuizScoreDTO quizScoreDTO = QuizScoreDTO.builder()
-                .user(userDTO)
-                .topic(topic)
-                .score(90)
+                .userName("lewocz")
+                .topicName("React")
+                .score(10)
                 .build();
 
         QuizScore quizScore = quizScoreMapper.quizScoreDtoToQuizScore(quizScoreDTO);
 
-        assertNotNull(quizScore);
-        assertEquals(userDTO.getUsername(), quizScore.getUser().getUsername());
-        assertEquals(userDTO.getEmail(), quizScore.getUser().getEmail());
-        assertEquals(topic.getName(), quizScore.getTopic().getName());
-        assertEquals(topic.getImageUrl(), quizScore.getTopic().getImageUrl());
+        assertEquals(quizScoreDTO.getUserName(), quizScore.getUser().getUsername());
+        assertEquals(quizScoreDTO.getTopicName(), quizScore.getTopic().getName());
         assertEquals(quizScoreDTO.getScore(), quizScore.getScore());
     }
 
     @Test
     void quizScoreToQuizScoreDto() {
-        User user = User.builder()
-                .id(UUID.randomUUID())
-                .username("testuser")
-                .password("password")
-                .email("testuser@example.com")
-                .build();
-
-        Topic topic = Topic.builder()
-                .id(UUID.randomUUID())
-                .name("Math")
-                .imageUrl("math_image_url")
-                .build();
-
         QuizScore quizScore = QuizScore.builder()
                 .id(UUID.randomUUID())
-                .user(user)
-                .topic(topic)
-                .score(90)
+                .user(User.builder().username("lewocz").build())
+                .topic(Topic.builder().name("React").build())
+                .score(10)
                 .build();
 
         QuizScoreDTO quizScoreDTO = quizScoreMapper.quizScoreToQuizScoreDto(quizScore);
 
-        assertNotNull(quizScoreDTO);
-        assertEquals(user.getUsername(), quizScoreDTO.getUser().getUsername());
-        assertEquals(user.getEmail(), quizScoreDTO.getUser().getEmail());
-        assertEquals(topic.getName(), quizScoreDTO.getTopic().getName());
-        assertEquals(topic.getImageUrl(), quizScoreDTO.getTopic().getImageUrl());
+        assertEquals(quizScore.getUser().getUsername(), quizScoreDTO.getUserName());
+        assertEquals(quizScore.getTopic().getName(), quizScoreDTO.getTopicName());
         assertEquals(quizScore.getScore(), quizScoreDTO.getScore());
     }
 }
