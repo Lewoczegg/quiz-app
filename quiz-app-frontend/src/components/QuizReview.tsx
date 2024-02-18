@@ -7,7 +7,7 @@ import QuizQuestion from "./QuizQuestion";
 
 interface Props {
   questions: Question[];
-  score: string;
+  score: number;
 }
 
 const QuizReview = ({ questions, score }: Props) => {

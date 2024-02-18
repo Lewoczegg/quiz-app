@@ -35,7 +35,6 @@ const LoginPage = () => {
       });
 
       if (response?.status === 200) {
-        console.log(response);
         setCookie("jwt", response.data.token, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         });
@@ -45,7 +44,6 @@ const LoginPage = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-      console.log(error);
       if (axios.isAxiosError(error)) {
         setErrorMessage(
           error.response?.data?.description || "An error occurred"

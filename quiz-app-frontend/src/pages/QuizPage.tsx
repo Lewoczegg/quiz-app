@@ -9,14 +9,18 @@ import TopBar from "../components/TopBar";
 import useQuestions from "../hooks/useQuestions";
 import useQuizStore from "../store/quizStore";
 import { calculateScore } from "../utils";
+import { submitQuiz } from "../services/quizService";
+import { useCookies } from "react-cookie";
 
 const QuizPage = () => {
   const { data: questions, isLoading } = useQuestions();
 
+  const [cookies] = useCookies();
+
   const queryClient = useQueryClient();
 
   const {
-    quiz: { selectedAnswers },
+    quiz: { selectedAnswers, topicName },
     setSelectedAnswer,
     setQuizRestarted,
   } = useQuizStore();
@@ -34,6 +38,14 @@ const QuizPage = () => {
   };
 
   const handleSubmitQuiz = () => {
+    submitQuiz(
+      {
+        topicName: topicName,
+        score: calculateScore(questions!, selectedAnswers),
+        userName: cookies.user,
+      },
+      cookies.jwt
+    );
     setShowResults(true);
   };
 

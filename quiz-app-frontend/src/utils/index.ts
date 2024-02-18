@@ -21,7 +21,7 @@ export const calculateScore = (
       score += 1;
     }
   });
-  if (!questions) return "0";
+  if (!questions) return 0;
 
-  return ((score / questions.length) * 100).toFixed(2);
+  return (score / questions.length) * 100;
 };
