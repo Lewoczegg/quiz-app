@@ -5,6 +5,7 @@ import lewocz.backend.dto.LoginRequest;
 import lewocz.backend.dto.LoginResponse;
 import lewocz.backend.dto.SignUpRequest;
 import lewocz.backend.helper.JwtHelper;
+import lewocz.backend.repository.UserRepository;
 import lewocz.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-
+    private final UserRepository userRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequest signUpRequest) throws Exception {
@@ -38,6 +39,8 @@ public class AuthController {
         }
 
         String token = JwtHelper.generateToken(request.getEmail());
-        return ResponseEntity.ok(new LoginResponse(request.getEmail(), token));
+        String username = userRepository.findByEmail(request.getEmail()).get().getUsername();
+
+        return ResponseEntity.ok(new LoginResponse(request.getEmail(), username, token));
     }
 }
