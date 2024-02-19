@@ -1,10 +1,5 @@
+import { QuizScore } from "../hooks/useQuizScores";
 import { apiRequest } from "./api-client";
-
-interface QuizScore {
-  userName: string;
-  topicName: string;
-  score: number;
-}
 
 export const submitQuiz = async (quizScore: QuizScore, token: string) => {
   apiRequest({
