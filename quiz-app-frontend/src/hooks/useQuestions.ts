@@ -32,6 +32,7 @@ const useQuestions = () => {
   return useQuery({
     queryKey: "questions",
     queryFn: getQuiz,
+    staleTime: 1000 * 60 * 60,
   });
 };
 
